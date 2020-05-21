@@ -81,10 +81,8 @@ export default {
   async getPlaylists(input, searchType) {
     const cachedRes = getFromCache(`${searchType}/${input}`);
     if (cachedRes !== null) {
-      console.log("hascache")
       return cachedRes
     } else {
-      console.log("nocache")
       try {
         var playlists = await service.get(`/playlists/search/${input}&${searchType}`)
         updateCache(`${searchType}/${input}`, playlists);
@@ -94,5 +92,46 @@ export default {
           return {};
       }
     }
+    // var cache = await caches.open('searchRequests')
+    // var responseFromCache = await cache.match(`${searchType}/${input}`)
+    // var secondTest = await cache.keys()
+    // console.log("got Respons", responseFromCache, secondTest)
+    // if (responseFromCache) {
+    //   return responseFromCache
+    // } else {
+    // var playlists = await service.get(`/playlists/search/${input}&${searchType}`)
+    // if (playlists.status === 200) {
+    //   var response = await cache.put(`${searchType}/${input}`, new Response(playlists))
+    //   console.log("put In cache", response)
+    //   return playlists
+    // }
+    // }
+  },
+
+  updateProfilePicture(id, data) {
+    console.log("add Picture")
+    const formData = new FormData()
+    for (const key in data) {
+      formData.append(key, data[key])
+    }
+    service.post('/user/addPicture/' + id, formData)
+      .then(res => res.data)
+      .catch(errHandler)
+  },
+
+  uploadPlaylistPicture(userid, playlistid, data) {
+    const formData = new FormData()
+    for (const key in data) {
+      formData.append(key, data[key])
+    }
+    service.post(`/playlists/addPicture/userid=${userid}&playlistid=${playlistid}`, formData)
+      .then(res => res.data)
+      .catch(errHandler)
+  },
+
+  getPlaylistPicture(userid, playlistid) {
+    service.get(`/playlists/playlistPicture/userid=${userid}&playlistid=${playlistid}`)
+      .then(res => res.data)
+      .catch(errHandler)
   }
 }

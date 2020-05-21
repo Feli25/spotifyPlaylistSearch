@@ -1,5 +1,6 @@
 $primary: #61E1E1;
 $secondary : #444444;
+//colors : https://dribbble.com/shots/11480320-Categories
 
 body {
   margin: 0;
@@ -93,6 +94,18 @@ body {
   .notSelected{
     background-color: $primary;
     color:$secondary;
+  }
+}
+.twoRowContent{
+  display: flex;
+  flex-direction: row;
+  .leftContent.rightContent{
+    display: flex;
+    flex-direction: column;
+  }
+  img{
+    width:200px;
+    padding-left: 20px;
   }
 }
 

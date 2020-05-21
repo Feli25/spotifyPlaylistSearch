@@ -11,11 +11,13 @@ export default class Profile extends Component {
     id: "",
     message: null,
     oldPassword: "",
-    newPassword: ""
+    newPassword: "",
+    imgPath: "",
+    file: null,
   }
   componentDidMount() {
     var user = api.getLocalStorageUser()
-    this.setState({ username: user.username, email: user.email, id: user._id })
+    this.setState({ username: user.username, email: user.email, id: user._id, imgPath: user.imgPath })
   }
   onChange = (e) => {
     this.setState({ [e.target.name]: e.target.value })
@@ -34,7 +36,10 @@ export default class Profile extends Component {
     }
     var newUser = { username: this.state.username, email: this.state.email }
     var updatetUser = await api.updateUserByID(this.state.id, newUser)
-    if (updatetUser) {
+    if (this.state.file) {
+      var newPicture = await api.updateProfilePicture(this.state.id, { picture: this.state.file })
+    }
+    if (updatetUser || newPicture) {
       this.setState({ message: "Erfolgreich verändert!" })
       this.toggleEdit()
     }
@@ -62,6 +67,14 @@ export default class Profile extends Component {
         this.setState({ message: "Das alte Passwort ist falsch" })
       })
   }
+  handleFileChange = (e) => {
+    e.preventDefault();
+    const file = e.target.files[0];
+    this.setState({
+      file: file,
+      imgPath: null,
+    })
+  }
   render() {
     var user = api.getLocalStorageUser()
     console.log("USER", user)
@@ -72,10 +85,14 @@ export default class Profile extends Component {
         {this.state.edit ? <React.Fragment>
           <div className="twoRowContent">
             <div className="leftContent">
-              Name: <input value={this.state.username} onChange={this.onChange} name="username" />
-              Email: <input value={this.state.email} onChange={this.onChange} name="email" />
+              <div>Name: <input value={this.state.username} onChange={this.onChange} name="username" /></div>
+              <div>Email: <input value={this.state.email} onChange={this.onChange} name="email" /></div>
             </div>
-            <div className="rightContent"></div>
+            <div className="rightContent">
+              {this.state.imgPath && <img src={this.state.imgPath} alt="Failed to load resource" />}
+              <label xl={3}>Add a picture</label>
+              <input type="file" name="imgPath" onChange={this.handleFileChange} /><br />
+            </div>
           </div>
           <button onClick={this.saveUser}>Speichern</button>
           <button onClick={this.toggleEdit}>Abbrechen</button>
@@ -92,7 +109,9 @@ export default class Profile extends Component {
                   <p>Name: {user.username}</p>
                   <p>Email: {user.email}</p>
                 </div>
-                <div className="rightContent"></div>
+                {user.imgPath && <div className="rightContent">
+                  <img src={user.imgPath} alt={user.imgName} />
+                </div>}
               </div>
               <button onClick={this.toggleEdit}>Name/Email bearbeiten</button>
               <button onClick={this.togglePasswordEdit}>Passwort bearbeiten</button>
