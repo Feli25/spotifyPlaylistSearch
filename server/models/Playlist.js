@@ -3,11 +3,11 @@ const Schema = mongoose.Schema
 
 const playlistSchema = new Schema(
   {
-    spotifyId: String,
+    _id: String,
     name: String,
     external_url: String,
     images: [Object],
-    tracks: [Object],
+    _tracks: [{ type: Schema.Types.ObjectId, ref: "Song" }],
     ownerName: String
   },
   {
