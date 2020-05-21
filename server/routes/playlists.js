@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const axios = require('axios');
-import { playlistById, playlistsByNameSSQ } from "../exampleRespons"
+import { playlistById, playlistsByName } from "../exampleRespons"
 
 const Spotifyservice = axios.create({
   baseURL: "https://api.spotify.com/v1"
@@ -16,7 +16,7 @@ const instanceSpotifyToken = axios.create({
 
 router.get('/search/:input&:type', (req, res, next) => {
   let { input, type } = req.params
-  var response = type === "name" ? playlistsByNameSSQ : playlistById
+  var response = type === "name" ? playlistsByName : playlistById
   // instanceSpotifyToken.post("", { grant_type: "client_credentials" })
   //   .then(token => {
   //     var searchURL = type === "name" ? '/search' : '/playlists/' + input
