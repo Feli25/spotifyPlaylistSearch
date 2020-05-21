@@ -63,8 +63,8 @@ export default {
       return responseFromCache
     } else {
       var playlists = await service.get(`/playlists/search/${input}&${searchType}`)
-      if (playlists.code === 1) {
-        var response = await cache.put(`${searchType}/${input}`, playlists)
+      if (playlists.status === 200) {
+        var response = await cache.put(`${searchType}/${input}`, new Response(playlists))
         return playlists
       }
     }

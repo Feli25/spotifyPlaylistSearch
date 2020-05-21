@@ -24,7 +24,7 @@ router.get('/search/:input&:type', (req, res, next) => {
   //     Spotifyservice.get(searchURL, params, { headers: { Authorization: token } })
   //       .then(response => {
   console.log(response)
-  return response
+  res.json(response)
   //       })
   //       .catch(err => { console.log("ERROR", err) })
   //   })
