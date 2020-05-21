@@ -7,11 +7,6 @@ const service = axios.create({
       : 'http://localhost:5000/api',
   withCredentials: true,
 })
-// const Spotifyservice = axios.create({
-//   baseURL: "https://api.spotify.com/v1/search",
-//   // Authorization:
-//   // withCredentials: true,
-// })
 
 const errHandler = err => {
   console.error(err)
@@ -61,15 +56,7 @@ export default {
     return service.get('/logout')
   },
 
-  // getAccessToken(clientId, redirectUri) {
-  //   return axios.get(`https://accounts.spotify.com/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=playlist-modify-public&response_type=token`)
-  // },
-
   getPlaylists(input) {
-    // this.getAccessToken("3689c3e246a84ae78bfb681a6e58d48b", "www.google.com")
-    // return Spotifyservice.get(`q=${input}$type=playlist`)
-    //   .then(res => res)
-    //   .catch(errHandler)
     return service
       .get('/playlists/search/' + input)
       .then(res => res)
