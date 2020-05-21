@@ -10,7 +10,7 @@ body {
 .App {
   text-align: center;
   background-color: #48ABAA;
-  height: 100vh;
+  min-height: 100vh;
 
   .App-header {
     background-color: $secondary;
@@ -36,7 +36,6 @@ body {
   .App-intro {
     font-size: large;
   }
-
   .MainContent{
     margin: 30px;
     align-items: center;
@@ -63,6 +62,9 @@ body {
       border-radius: 20px;
       border: 1px solid $primary;
       font-size: 20px;
+    }
+    .moreBtn{
+      width:80px
     }
     input{
       border-radius: 10px;
