@@ -1,6 +1,8 @@
 const express = require('express')
 const router = express.Router()
 const User = require('../models/User')
+const parser = require('../configs/cloudinary.js');
+const cloudinary = require('cloudinary');
 
 // Bcrypt to encrypt passwords
 const bcrypt = require('bcrypt')
@@ -40,6 +42,29 @@ router.post('/editPassword/:id', (req, res, next) => {
         .catch(err => next(err))
     })
     .catch(err => next(err))
+})
+
+router.post('/addPicture/:id', parser.single('picture'), (req, res, next) => {
+  let id = req.params.id
+  let file = req.file;
+  User.findById(id)
+    .then(user => {
+      console.log("found user")
+      if (user.public_id) {
+        cloudinary.v2.uploader.destroy(user.public_id, function (result) { console.log(result) });
+      }
+      User.findByIdAndUpdate(id, {
+        imgPath: file.url,
+        imgName: file.originalname,
+        public_id: file.public_id
+      })
+        .then(response => {
+          res.json(response)
+        })
+        .catch(err => next(err))
+    })
+    .catch(err => next(err))
+
 })
 
 module.exports = router

@@ -4,6 +4,9 @@ const axios = require('axios');
 const request = require("request");
 const Playlist = require('../models/Playlist')
 const Song = require('../models/Song')
+const PlaylistPicture = require('../models/PlaylistPicture')
+const parser = require('../configs/cloudinary.js');
+const cloudinary = require('cloudinary');
 
 function saveNewTrack(track) {
   var song = track.track
@@ -110,6 +113,37 @@ router.get('/search/:input&:type', (req, res, next) => {
       console.log(error);
     }
   })
+})
+
+router.get('/playlistPicture/:userid&:playlistid', (req, res, next) => {
+  let { userid, playlistid } = req.params
+  PlaylistPicture.findOne({ _user: userid, _playlist: playlistid })
+    .then(response => {
+      res.json(response)
+    })
+    .catch(err => next(err))
+})
+
+router.post('/addPicture/:userid&:playlistid', parser.single('picture'), (req, res, next) => {
+  let { userid, playlistid } = req.params
+  let file = req.file;
+  PlaylistPicture.findOne({ _user: userid, _playlist: playlistid })
+    .then(picture => {
+      if (picture.public_id) {
+        cloudinary.v2.uploader.destroy(picture.public_id, function (result) { console.log(result) });
+      }
+      var newPic = new PlaylistPicture({
+        _user: userid,
+        _playlist: playlistid,
+        imgPath: file.url,
+        imgName: file.originalname,
+        public_id: file.public_id
+      })
+      newPic.save()
+        .then(response => { res.json(response) })
+        .catch(err => next(err))
+    })
+    .catch(err => next(err))
 })
 
 module.exports = router

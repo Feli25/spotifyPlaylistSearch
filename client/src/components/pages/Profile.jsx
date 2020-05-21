@@ -89,9 +89,9 @@ export default class Profile extends Component {
               <div>Email: <input value={this.state.email} onChange={this.onChange} name="email" /></div>
             </div>
             <div className="rightContent">
-              {this.state.imgPath && <img src={this.state.imgPath} alt="Failed to load resource" />}
-              <label xl={3}>Add a picture</label>
-              <input type="file" name="imgPath" onChange={this.handleFileChange} /><br />
+              <div>{this.state.imgPath && <img src={this.state.imgPath} alt="Failed to load resource" />}</div>
+              <div><label xl={3}>Add/Change picture</label></div>
+              <div><input type="file" name="imgPath" onChange={this.handleFileChange} /><br /></div>
             </div>
           </div>
           <button onClick={this.saveUser}>Speichern</button>
