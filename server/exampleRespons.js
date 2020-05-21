@@ -1,4 +1,4 @@
-export const playlistById = {
+const playlistById = {
   "collaborative": false,
   "description": "Having friends over for dinner? Here´s the perfect playlist.",
   "external_urls": {
@@ -105,7 +105,7 @@ export const playlistById = {
   "uri": "spotify:user:spotify:playlist:59ZbFPES4DQwEjBpWHzrtC"
 }
 
-export const playlistsByName = {
+const playlistsByName = {
   "artists": {
     "href": "https://api.spotify.com/v1/search?query=tania+bowra&offset=0&limit=20&type=artist",
     "items": [{
@@ -140,3 +140,5 @@ export const playlistsByName = {
     "total": 1
   }
 }
+
+module.exports = { playlistById, playlistsByName }

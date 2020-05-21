@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const axios = require('axios');
-import { playlistById, playlistsByName } from "../exampleRespons"
+const { playlistById, playlistsByName } = require("../exampleRespons")
 
 const Spotifyservice = axios.create({
   baseURL: "https://api.spotify.com/v1"
