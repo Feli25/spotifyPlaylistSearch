@@ -52,7 +52,7 @@ body {
       color:inherit;
     }
     input, button, select {
-      width:200px;
+      width:250px;
       margin:5px;
       box-shadow: 2px 3px #888888;
     };
@@ -70,6 +70,27 @@ body {
     select, input{
       height:20px
     }
+  }
+}
+.selectTypeWrapper{
+  display: flex;
+  flex-direction: row;
+  width:200px;
+  margin-top: 10px;
+  margin-bottom: 5px;
+  .selectTypeOption{
+    width: 50%;
+    height:20px;
+    border: 1px solid $primary;
+    padding:5px
+  }
+  .selected{
+    background-color: $secondary;
+    color:$primary;
+  }
+  .notSelected{
+    background-color: $primary;
+    color:$secondary;
   }
 }
 
