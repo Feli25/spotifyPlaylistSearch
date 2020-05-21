@@ -56,10 +56,17 @@ export default {
     return service.get('/logout')
   },
 
-  getPlaylists(input) {
-    return service
-      .get('/playlists/search/' + input)
-      .then(res => res)
-      .catch(errHandler)
+  async getPlaylists(input) {
+    var cache = await caches.open('searchRequests')
+    var responseFromCache = await cache.match(input)
+    if (responseFromCache) {
+      return responseFromCache
+    } else {
+      var playlists = await service.get('/playlists/search/' + input)
+      if (playlists.code === 1) {
+        var response = await cache.put(input, playlists)
+        return playlists
+      }
+    }
   }
 }
