@@ -78,14 +78,17 @@ export default {
   },
 
   async getPlaylists(input, searchType) {
-    // var cache = await caches.open('searchRequests')
-    // var responseFromCache = await cache.match(`${searchType}/${input}`)
+    var cache = await caches.open('searchRequests')
+    var responseFromCache = await cache.match(`${searchType}/${input}`)
+    var secondTest = await cache.keys()
+    console.log("got Respons", responseFromCache, secondTest)
     // if (responseFromCache) {
     //   return responseFromCache
     // } else {
     var playlists = await service.get(`/playlists/search/${input}&${searchType}`)
     if (playlists.status === 200) {
-      // var response = await cache.put(`${searchType}/${input}`, new Response(playlists))
+      var response = await cache.put(`${searchType}/${input}`, new Response(playlists))
+      console.log("put In cache", response)
       return playlists
     }
     // }

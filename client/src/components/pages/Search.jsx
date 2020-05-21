@@ -1,26 +1,30 @@
 import React, { Component } from 'react'
 import api from '../../api'
+//playListId to play with: 6u4KuddLp926mEZHqCOQwg
 
 
 export default class Search extends Component {
   state = {
     searchField: "",
+    hasChanged: false,
     results: [],
     searchType: "name",
     message: null,
     selectedPlaylist: null
   }
   onChange = (e) => {
-    this.setState({ [e.target.name]: e.target.value })
+    this.setState({ [e.target.name]: e.target.value, hasChanged: true })
   }
   fetchData = async () => {
-    this.setState({ message: "Lädt..." })
-    var results = await api.getPlaylists(this.state.searchField, this.state.searchType)
-    if (results && results.data) {
-      if (this.state.searchType === "name" && results.data.playlists) {
-        this.setState({ results: results.data.playlists.items, message: null })
-      } else {//6u4KuddLp926mEZHqCOQwg
-        this.setState({ results: [results.data], message: null })
+    if (this.state.hasChanged && this.state.searchField !== "") {
+      this.setState({ message: "Lädt..." })
+      var results = await api.getPlaylists(this.state.searchField, this.state.searchType)
+      if (results && results.data) {
+        if (this.state.searchType === "name" && results.data.playlists) {
+          this.setState({ results: results.data.playlists.items, message: null, hasChanged: false })
+        } else {
+          this.setState({ results: [results.data], message: null, hasChanged: false })
+        }
       }
     }
   }
