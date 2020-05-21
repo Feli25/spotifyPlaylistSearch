@@ -1,0 +1,63 @@
+$primary: #61E1E1;
+$secondary : #444444;
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+.info {
+  margin: 20px;
+  padding: 10px 20px;
+  border-radius: 10px;
+  display: inline-block;
+  background-color: #5776e9;
+  color: white;
+}
+
+.info.info-danger {
+  background-color: #e73f3f;
+}
+
+.App {
+  text-align: center;
+
+  .App-header {
+    background-color: $primary;
+    padding: 20px;
+    color: white;
+
+    a {
+      color: white;
+      padding: 0 5px;
+      text-decoration: unset;
+    }
+
+    a.active {
+      font-weight: bold;
+    }
+  }
+
+  .App-title {
+    font-size: 1.5em;
+  }
+
+  .App-intro {
+    font-size: large;
+  }
+
+}
+
+.Home {
+  p {
+    font-size: 1.2em;
+  }
+}
+
+.Secret {
+  .result {
+    font-size: 1.2em;
+    color: $primary;
+  }
+}
