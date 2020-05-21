@@ -7,29 +7,18 @@ body {
   font-family: sans-serif;
 }
 
-.info {
-  margin: 20px;
-  padding: 10px 20px;
-  border-radius: 10px;
-  display: inline-block;
-  background-color: #5776e9;
-  color: white;
-}
-
-.info.info-danger {
-  background-color: #e73f3f;
-}
-
 .App {
   text-align: center;
+  background-color: #48ABAA;
+  height: 100vh;
 
   .App-header {
-    background-color: $primary;
+    background-color: $secondary;
     padding: 20px;
-    color: white;
+    color: $secondary;
 
     a {
-      color: white;
+      color: $primary;
       padding: 0 5px;
       text-decoration: unset;
     }
@@ -41,22 +30,27 @@ body {
 
   .App-title {
     font-size: 1.5em;
+    color: $primary;
   }
 
   .App-intro {
     font-size: large;
   }
 
-  .Search {
-    display: flex;
-    flex-direction: column;
+  .MainContent{
     margin: 30px;
     align-items: center;
     background-color: $secondary;
-    height:70vh;
+    min-height:40vh;
     border-radius: 50px;
     padding:20px;
     color:$primary;
+    display: flex;
+    flex-direction: column;
+    a{
+      text-decoration: none;
+      color:inherit;
+    }
     input, button, select {
       width:200px;
       margin:5px;
@@ -72,9 +66,8 @@ body {
     }
     input{
       border-radius: 10px;
-      height: 20px;
     }
-    select{
+    select, input{
       height:20px
     }
   }

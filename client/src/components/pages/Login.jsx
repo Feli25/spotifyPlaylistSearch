@@ -32,7 +32,7 @@ export default class Login extends Component {
 
   render() {
     return (
-      <div className="Login">
+      <div className="MainContent">
         <h2>Einloggen</h2>
         <form>
           Email:{' '}

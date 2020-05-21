@@ -38,7 +38,7 @@ export default class Signup extends Component {
 
   render() {
     return (
-      <div className="Signup">
+      <div className="MainContent">
         <h2>Registrieren</h2>
         <form>
           Name:{' '}

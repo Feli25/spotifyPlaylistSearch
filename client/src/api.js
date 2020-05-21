@@ -56,6 +56,27 @@ export default {
     return service.get('/logout')
   },
 
+  updateUserByID(id, newData) {
+    return service
+      .post('/user/edit/' + id, newData)
+      .then(res => {
+        localStorage.setItem('user', JSON.stringify(res.data))
+        return res.data
+      })
+      .catch(errHandler)
+  },
+
+  updatePasswordByUserId(id, newData) {
+    return service
+      .post('/user/editPassword/' + id, newData)
+      .then(res => {
+        localStorage.setItem('user', JSON.stringify(res.data))
+        return res.data
+      })
+      .catch(errHandler)
+
+  },
+
   async getPlaylists(input, searchType) {
     var cache = await caches.open('searchRequests')
     var responseFromCache = await cache.match(`${searchType}/${input}`)

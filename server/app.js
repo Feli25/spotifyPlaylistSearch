@@ -50,6 +50,7 @@ require('./passport')(app)
 
 app.use('/api', require('./routes/auth'))
 app.use('/api/playlists', require('./routes/playlists'))
+app.use('/api/user', require('./routes/user'))
 
 app.use('/api/*', (req, res, next) => {
   let err = new Error('Not Found')

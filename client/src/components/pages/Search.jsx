@@ -28,14 +28,14 @@ export default class Search extends Component {
   }
   render() {
     return (
-      <div className="Search">
+      <div className="MainContent">
         Search
-        <select value={this.state.searchType} className="fields" iname="searchType" name="searchType" onChange={this.onChange}>
+        <select value={this.state.searchType} iname="searchType" name="searchType" onChange={this.onChange}>
           <option value="name">Name</option>
           <option value="id">Playlist ID</option>
         </select>
-        <input className="fields" name="searchField" value={this.state.searchField} onChange={this.onChange} />
-        {this.state.message ? <p>{this.state.message}</p> : <button className="searchButton" onClick={this.fetchData}>Search</button>}
+        <input name="searchField" value={this.state.searchField} onChange={this.onChange} />
+        {this.state.message ? <p>{this.state.message}</p> : <button onClick={this.fetchData}>Search</button>}
         <div className="searchResults">
           {this.state.results && this.state.results.map(playlist => {
             return <div>{playlist.name}Go to spotify</div>

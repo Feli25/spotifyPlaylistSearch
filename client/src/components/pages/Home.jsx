@@ -6,7 +6,7 @@ export default class Home extends Component {
   render() {
     var loggedIn = api.isLoggedIn()
     return (
-      <div className="Home">
+      <div className="Home MainContent">
         <h2>{loggedIn ? "Wilkommen zurück " + api.getLocalStorageUser().username : "Willkommen"}</h2>
         {loggedIn ? <React.Fragment>
           <p>Um nach neuen Playlists zu suchen, klicke auf <a href="/search">"Suche"</a></p>
