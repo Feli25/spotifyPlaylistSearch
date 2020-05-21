@@ -21,7 +21,7 @@ export default class Search extends Component {
         console.log(results.data.playlists.items)
         this.setState({ results: results.data.playlists.items, message: null })
       } else {//6u4KuddLp926mEZHqCOQwg
-        console.log(results.data)
+        console.log(results.data.tracks.items)
         this.setState({ results: [results.data], message: null })
       }
     }

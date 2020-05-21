@@ -78,16 +78,16 @@ export default {
   },
 
   async getPlaylists(input, searchType) {
-    var cache = await caches.open('searchRequests')
-    var responseFromCache = await cache.match(`${searchType}/${input}`)
-    if (responseFromCache) {
-      return responseFromCache
-    } else {
-      var playlists = await service.get(`/playlists/search/${input}&${searchType}`)
-      if (playlists.status === 200) {
-        var response = await cache.put(`${searchType}/${input}`, new Response(playlists))
-        return playlists
-      }
+    // var cache = await caches.open('searchRequests')
+    // var responseFromCache = await cache.match(`${searchType}/${input}`)
+    // if (responseFromCache) {
+    //   return responseFromCache
+    // } else {
+    var playlists = await service.get(`/playlists/search/${input}&${searchType}`)
+    if (playlists.status === 200) {
+      // var response = await cache.put(`${searchType}/${input}`, new Response(playlists))
+      return playlists
     }
+    // }
   }
 }
