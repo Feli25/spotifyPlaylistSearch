@@ -25,6 +25,8 @@ export default class Search extends Component {
         } else {
           this.setState({ results: [results.data], message: null, hasChanged: false })
         }
+      } else {
+        this.setState({ message: "Suche hat keine Ergebnisse gebracht" })
       }
     }
   }
