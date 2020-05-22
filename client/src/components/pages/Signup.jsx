@@ -2,38 +2,36 @@ import React, { Component } from 'react'
 import api from '../../api'
 
 export default class Signup extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      username: '',
-      email: '',
-      password: '',
-      message: null,
-    }
-    this.handleInputChange = this.handleInputChange.bind(this)
+  state = {
+    username: '',
+    email: '',
+    password: '',
+    message: null,
   }
 
-  handleInputChange(event) {
+  handleInputChange = (event) => {
     this.setState({
       [event.target.name]: event.target.value,
     })
   }
 
-  handleClick(e) {
+  handleClick = async (e) => {
     e.preventDefault()
     let data = {
       username: this.state.username,
       email: this.state.email,
       password: this.state.password,
     }
-    api
-      .signup(data)
-      .then(result => {
+    try {
+      var signup = await api.signup(data)
+      if (signup) {
         console.log('SUCCESS!')
         this.props.history.push('/')
         window.location.reload()
-      })
-      .catch(err => this.setState({ message: err.toString() }))
+      }
+    } catch (err) {
+      this.setState({ message: err.toString() })
+    }
   }
 
   render() {

@@ -8,13 +8,6 @@ import Profile from './pages/Profile'
 import api from '../api'
 
 export default class App extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      countries: [],
-    }
-  }
-
   handleLogoutClick(e) {
     api.logout()
     window.location.reload()

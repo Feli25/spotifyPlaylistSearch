@@ -2,32 +2,31 @@ import React, { Component } from 'react'
 import api from '../../api'
 
 export default class Login extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      email: '',
-      password: '',
-      message: null,
-    }
-    this.handleInputChange = this.handleInputChange.bind(this)
+  state = {
+    email: '',
+    password: '',
+    message: null,
   }
 
-  handleInputChange(event) {
+  handleInputChange = (event) => {
     this.setState({
       [event.target.name]: event.target.value,
     })
   }
 
-  handleClick(e) {
+  handleClick = async (e) => {
     e.preventDefault()
-    api
-      .login(this.state.email, this.state.password)
-      .then(result => {
-        console.log('SUCCESS!')
+    try {
+      var login = await api.login(this.state.email, this.state.password)
+      if (login) {
         this.props.history.push('/')
         window.location.reload()
-      })
-      .catch(err => this.setState({ message: err.toString() }))
+      } else {
+        this.setState({ message: "Etwas hat nicht geklappt" })
+      }
+    } catch (err) {
+      this.setState({ message: err.toString() })
+    }
   }
 
   render() {
@@ -51,7 +50,7 @@ export default class Login extends Component {
             onChange={this.handleInputChange}
           />{' '}
           <br />
-          <button onClick={e => this.handleClick(e)}>Login</button>
+          <button onClick={this.handleClick}>Login</button>
         </form>
         {this.state.message && (
           <div className="info info-danger">{this.state.message}</div>

@@ -61,18 +61,18 @@ export default class Profile extends Component {
       oldPassword: this.state.oldPassword,
       newPassword: this.state.newPassword
     }
-    api.updatePasswordByUserId(this.state.id, data)
-      .then(newUser => {
-        console.log(newUser)
-        if (newUser) {
-          this.setState({ message: "Erfolgreich verändert!" })
-          this.togglePasswordEdit()
-        }
-      })
-      .catch(err => {
-        console.log(err)
+    try {
+      var newUser = api.updatePasswordByUserId(this.state.id, data)
+      if (newUser) {
+        this.setState({ message: "Erfolgreich verändert!" })
+        this.togglePasswordEdit()
+      } else {
         this.setState({ message: "Das alte Passwort ist falsch" })
-      })
+      }
+    } catch (err) {
+      console.log(err)
+      this.setState({ message: "Das alte Passwort ist falsch" })
+    }
   }
   handleFileChange = (e) => {
     e.preventDefault();
@@ -97,7 +97,7 @@ export default class Profile extends Component {
               </div>
               <div className="rightContent">
                 <div>{this.state.imgPath && <img src={this.state.imgPath} alt="Failed to load resource" />}</div>
-                <div><label xl={3}>Add/Change picture</label></div>
+                <div><label>Add/Change picture</label></div>
                 <div><input type="file" name="imgPath" onChange={this.handleFileChange} /><br /></div>
               </div>
             </div>
@@ -116,7 +116,7 @@ export default class Profile extends Component {
                     <p>Name: {user.username}</p>
                     <p>Email: {user.email}</p>
                   </div>
-                  {user.imgPath && <div className="rightContent">
+                  {user?.imgPath && <div className="rightContent">
                     <img src={user.imgPath} alt={user.imgName} />
                   </div>}
                 </div>
