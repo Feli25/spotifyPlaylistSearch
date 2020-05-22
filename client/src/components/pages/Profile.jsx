@@ -14,10 +14,11 @@ export default class Profile extends Component {
     newPassword: "",
     imgPath: "",
     file: null,
+    user: null
   }
   componentDidMount() {
     var user = api.getLocalStorageUser()
-    this.setState({ username: user.username, email: user.email, id: user._id, imgPath: user.imgPath })
+    this.setState({ user: user, username: user.username, email: user.email, id: user._id, imgPath: user.imgPath })
   }
   onChange = (e) => {
     this.setState({ [e.target.name]: e.target.value })
@@ -35,13 +36,19 @@ export default class Profile extends Component {
       return
     }
     var newUser = { username: this.state.username, email: this.state.email }
-    var updatetUser = await api.updateUserByID(this.state.id, newUser)
-    if (this.state.file) {
-      var newPicture = await api.updateProfilePicture(this.state.id, { picture: this.state.file })
-    }
-    if (updatetUser || newPicture) {
-      this.setState({ message: "Erfolgreich verändert!" })
-      this.toggleEdit()
+    try {
+      var updatetUser = await api.updateUserByID(this.state.id, newUser)
+      if (this.state.file) {
+        var newPicture = await api.updateProfilePicture(this.state.id, { picture: this.state.file })
+      }
+      if (updatetUser || newPicture) {
+        this.setState({ message: "Erfolgreich verändert!" })
+        this.toggleEdit()
+        var user = api.getLocalStorageUser()
+        this.setState({ user: user })
+      }
+    } catch (err) {
+      this.setState({ message: err.toString() })
     }
   }
   savePassword = async () => {
@@ -76,47 +83,49 @@ export default class Profile extends Component {
     })
   }
   render() {
-    var user = api.getLocalStorageUser()
-    console.log("USER", user)
-    return (
-      <div className="MainContent">
-        <h4>Mein Profil</h4>
-        {this.state.message && <p>{this.state.message}</p>}
-        {this.state.edit ? <React.Fragment>
-          <div className="twoRowContent">
-            <div className="leftContent">
-              <div>Name: <input value={this.state.username} onChange={this.onChange} name="username" /></div>
-              <div>Email: <input value={this.state.email} onChange={this.onChange} name="email" /></div>
-            </div>
-            <div className="rightContent">
-              <div>{this.state.imgPath && <img src={this.state.imgPath} alt="Failed to load resource" />}</div>
-              <div><label xl={3}>Add/Change picture</label></div>
-              <div><input type="file" name="imgPath" onChange={this.handleFileChange} /><br /></div>
-            </div>
-          </div>
-          <button onClick={this.saveUser}>Speichern</button>
-          <button onClick={this.toggleEdit}>Abbrechen</button>
-        </React.Fragment> :
-          this.state.editpassword ?
-            <React.Fragment>
-              Altes Passwort:<input type="password" value={this.state.oldPassword} name="oldPassword" onChange={this.onChange} />
-              Neues Passwort:<input type="password" value={this.state.newPassword} name="newPassword" onChange={this.onChange} />
-              <button onClick={this.savePassword}>Speichern</button>
-            </React.Fragment> :
-            <React.Fragment>
-              <div className="twoRowContent">
-                <div className="leftContent">
-                  <p>Name: {user.username}</p>
-                  <p>Email: {user.email}</p>
-                </div>
-                {user.imgPath && <div className="rightContent">
-                  <img src={user.imgPath} alt={user.imgName} />
-                </div>}
+    var user = this.state.user
+    if (user) {
+      return (
+        <div className="MainContent">
+          <h4>Mein Profil</h4>
+          {this.state.message && <p>{this.state.message}</p>}
+          {this.state.edit ? <React.Fragment>
+            <div className="twoRowContent">
+              <div className="leftContent">
+                <div>Name: <input value={this.state.username} onChange={this.onChange} name="username" /></div>
+                <div>Email: <input value={this.state.email} onChange={this.onChange} name="email" /></div>
               </div>
-              <button onClick={this.toggleEdit}>Name/Email bearbeiten</button>
-              <button onClick={this.togglePasswordEdit}>Passwort bearbeiten</button>
-            </React.Fragment>}
-      </div>
-    )
+              <div className="rightContent">
+                <div>{this.state.imgPath && <img src={this.state.imgPath} alt="Failed to load resource" />}</div>
+                <div><label xl={3}>Add/Change picture</label></div>
+                <div><input type="file" name="imgPath" onChange={this.handleFileChange} /><br /></div>
+              </div>
+            </div>
+            <button onClick={this.saveUser}>Speichern</button>
+            <button onClick={this.toggleEdit}>Abbrechen</button>
+          </React.Fragment> :
+            this.state.editpassword ?
+              <React.Fragment>
+                Altes Passwort:<input type="password" value={this.state.oldPassword} name="oldPassword" onChange={this.onChange} />
+              Neues Passwort:<input type="password" value={this.state.newPassword} name="newPassword" onChange={this.onChange} />
+                <button onClick={this.savePassword}>Speichern</button>
+              </React.Fragment> :
+              <React.Fragment>
+                <div className="twoRowContent">
+                  <div className="leftContent">
+                    <p>Name: {user.username}</p>
+                    <p>Email: {user.email}</p>
+                  </div>
+                  {user.imgPath && <div className="rightContent">
+                    <img src={user.imgPath} alt={user.imgName} />
+                  </div>}
+                </div>
+                <button onClick={this.toggleEdit}>Name/Email bearbeiten</button>
+                <button onClick={this.togglePasswordEdit}>Passwort bearbeiten</button>
+              </React.Fragment>}
+        </div>
+      )
+    }
+    else { return (<div></div>) }
   }
 }

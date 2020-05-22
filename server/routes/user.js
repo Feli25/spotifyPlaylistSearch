@@ -11,14 +11,42 @@ const bcryptSalt = 10
 router.post('/edit/:id', (req, res, next) => {
   let id = req.params.id
   let { username, email } = req.body
-  User.findByIdAndUpdate(id, { username, email })
+  User.findByIdAndUpdate(id)
     .then(user => {
-      req.logIn(user, () => {
-        user.password = undefined
-        res.json(user)
-      })
+      if (user.email !== email) {
+        console.log("has changed mail")
+        User.findOne({ email })
+          .then(userDoc => {
+            if (userDoc !== null) {
+              res.status(409).json({ message: 'The email already exists' })
+              return
+            } else {
+              User.findByIdAndUpdate(id, { username, email })
+                .then(response => {
+                  User.findById(response.id)
+                    .then(updatetUser => {
+                      updatetUser.password = undefined
+                      res.json(updatetUser)
+                    })
+                    .catch(err => next(err))
+                })
+                .catch(err => next(err))
+            }
+          })
+      } else {
+        console.log("no change mail")
+        User.findByIdAndUpdate(id, { username, email })
+          .then(response => {
+            User.findById(response.id)
+              .then(updatetUser => {
+                updatetUser.password = undefined
+                res.json(updatetUser)
+              })
+              .catch(err => next(err))
+          })
+          .catch(err => next(err))
+      }
     })
-    .catch(err => next(err))
 })
 
 router.post('/editPassword/:id', (req, res, next) => {
@@ -33,11 +61,13 @@ router.post('/editPassword/:id', (req, res, next) => {
       const salt = bcrypt.genSaltSync(bcryptSalt)
       const hashPass = bcrypt.hashSync(newPassword, salt)
       User.findByIdAndUpdate(id, { password: hashPass })
-        .then(newUser => {
-          req.logIn(newUser, () => {
-            newUser.password = undefined
-            res.json(newUser)
-          })
+        .then(response => {
+          User.findById(response.id)
+            .then(updatetUser => {
+              updatetUser.password = undefined
+              res.json(updatetUser)
+            })
+            .catch(err => next(err))
         })
         .catch(err => next(err))
     })
@@ -59,7 +89,12 @@ router.post('/addPicture/:id', parser.single('picture'), (req, res, next) => {
         public_id: file.public_id
       })
         .then(response => {
-          res.json(response)
+          User.findById(response.id)
+            .then(updatetUser => {
+              updatetUser.password = undefined
+              res.json(updatetUser)
+            })
+            .catch(err => next(err))
         })
         .catch(err => next(err))
     })

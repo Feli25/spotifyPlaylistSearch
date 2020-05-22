@@ -62,6 +62,7 @@ export default {
       .post('/user/edit/' + id, newData)
       .then(res => {
         localStorage.setItem('user', JSON.stringify(res.data))
+        console.log("UPDATET", res.data)
         return res.data
       })
       .catch(errHandler)
@@ -115,7 +116,10 @@ export default {
       formData.append(key, data[key])
     }
     service.post('/user/addPicture/' + id, formData)
-      .then(res => res.data)
+      .then(res => {
+        localStorage.setItem('user', JSON.stringify(res.data))
+        return res.data
+      })
       .catch(errHandler)
   },
 
