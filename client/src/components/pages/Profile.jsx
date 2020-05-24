@@ -91,15 +91,11 @@ export default class Profile extends Component {
           {this.state.message && <p>{this.state.message}</p>}
           {this.state.edit ? <React.Fragment>
             <div className="twoRowContent">
-              <div className="leftContent">
-                <div>Name: <input value={this.state.username} onChange={this.onChange} name="username" /></div>
-                <div>Email: <input value={this.state.email} onChange={this.onChange} name="email" /></div>
-              </div>
-              <div className="rightContent">
-                <div>{this.state.imgPath && <img src={this.state.imgPath} alt="Failed to load resource" />}</div>
-                <div><label>Add/Change picture</label></div>
-                <div><input type="file" name="imgPath" onChange={this.handleFileChange} /><br /></div>
-              </div>
+              <div>Name: <input value={this.state.username} onChange={this.onChange} name="username" /></div>
+              <div>Email: <input value={this.state.email} onChange={this.onChange} name="email" /></div>
+              <div>{this.state.imgPath && <img src={this.state.imgPath} alt="Failed to load resource" />}</div>
+              <div><label>Add/Change picture</label></div>
+              <div><input type="file" name="imgPath" onChange={this.handleFileChange} /><br /></div>
             </div>
             <button onClick={this.saveUser}>Speichern</button>
             <button onClick={this.toggleEdit}>Abbrechen</button>
@@ -112,13 +108,11 @@ export default class Profile extends Component {
               </React.Fragment> :
               <React.Fragment>
                 <div className="twoRowContent">
-                  <div className="leftContent">
-                    <p>Name: {user.username}</p>
-                    <p>Email: {user.email}</p>
-                  </div>
-                  {user?.imgPath && <div className="rightContent">
+                  <p>Name: {user.username}</p>
+                  <p>Email: {user.email}</p>
+                  {user?.imgPath &&
                     <img src={user.imgPath} alt={user.imgName} />
-                  </div>}
+                  }
                 </div>
                 <button onClick={this.toggleEdit}>Name/Email bearbeiten</button>
                 <button onClick={this.togglePasswordEdit}>Passwort bearbeiten</button>

@@ -101,11 +101,7 @@ body {
 }
 .twoRowContent{
   display: flex;
-  flex-direction: row;
-  .leftContent.rightContent{
-    display: flex;
-    flex-direction: column;
-  }
+  flex-direction: column;
   img{
     width:200px;
     padding-left: 20px;
