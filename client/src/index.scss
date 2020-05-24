@@ -73,6 +73,9 @@ body {
     select, input{
       height:20px
     }
+    img {
+      max-width: 250px;
+    }
   }
 }
 .selectTypeWrapper{
