@@ -109,13 +109,25 @@ export default {
     // }
   },
 
+  getPlaylistTracks(id) {
+    return service.get('/playlists/tracks/' + id)
+      .then(res => res.data)
+      .catch(errHandler)
+  },
+
+  getSongDetails(id) {
+    return service.get('/playlists/songsById/' + id)
+      .then(res => res.data)
+      .catch(errHandler)
+  },
+
   updateProfilePicture(id, data) {
     console.log("add Picture")
     const formData = new FormData()
     for (const key in data) {
       formData.append(key, data[key])
     }
-    service.post('/user/addPicture/' + id, formData)
+    return service.post('/user/addPicture/' + id, formData)
       .then(res => {
         localStorage.setItem('user', JSON.stringify(res.data))
         return res.data
@@ -128,13 +140,13 @@ export default {
     for (const key in data) {
       formData.append(key, data[key])
     }
-    service.post(`/playlists/addPicture/userid=${userid}&playlistid=${playlistid}`, formData)
+    return service.post(`/playlists/addPicture/userid=${userid}&playlistid=${playlistid}`, formData)
       .then(res => res.data)
       .catch(errHandler)
   },
 
   getPlaylistPicture(userid, playlistid) {
-    service.get(`/playlists/playlistPicture/userid=${userid}&playlistid=${playlistid}`)
+    return service.get(`/playlists/playlistPicture/userid=${userid}&playlistid=${playlistid}`)
       .then(res => res.data)
       .catch(errHandler)
   }

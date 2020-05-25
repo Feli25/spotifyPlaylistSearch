@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import api from '../../api'
 //playListId to play with: 6u4KuddLp926mEZHqCOQwg
+import PlaylistDetails from './PlaylistDetails'
 
 
 export default class Search extends Component {
@@ -33,17 +34,11 @@ export default class Search extends Component {
     return (
       <div className="MainContent">
         {selectedPlaylist ?
-          <React.Fragment>
-            {selectedPlaylist?.images?.[0] &&
-              <img src={selectedPlaylist.images[0].url} alt="playlistImage" />}
-            <div>
-              <p><strong>Name:</strong> {selectedPlaylist.name}</p>
-              <p><strong>Beschreibung:</strong> {selectedPlaylist.description}</p>
-              {selectedPlaylist.owner?.display_name && <p><strong>Besitzer:</strong> {selectedPlaylist.owner?.display_name}</p>}
-            </div>
-            {selectedPlaylist.external_urls?.spotify && <button><a href={selectedPlaylist.external_urls?.spotify}>Zu Spotify</a></button>}
-            <br /><button onClick={() => { this.setState({ selectedPlaylist: null }) }}>Schließen</button>
-          </React.Fragment> :
+          <PlaylistDetails
+            selectedPlaylist={selectedPlaylist}
+            close={() => { this.setState({ selectedPlaylist: null }) }}
+          />
+          :
           <React.Fragment>
             Suche nach:
         <div className="selectTypeWrapper">
