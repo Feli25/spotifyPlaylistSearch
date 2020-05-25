@@ -3,7 +3,7 @@ const Schema = mongoose.Schema
 
 const songSchema = new Schema(
   {
-    _id: String,
+    spotifyid: String,
     name: String,
     external_url: String,
     popularity: Number,

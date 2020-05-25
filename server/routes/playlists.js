@@ -12,7 +12,7 @@ function saveNewTrack(track) {
   var song = track.track
   var artists = song.artists.map(artist => { return artist.name })
   var newSong = new Song({
-    _id: song.id,
+    spotifyid: song.id,
     name: song.name,
     external_url: song.external_urls.spotify,
     popularity: song.popularity,
@@ -20,7 +20,7 @@ function saveNewTrack(track) {
     artists: artists,
     durationMS: song.duration_ms,
   })
-  Song.findById(song.id)//simultaneously checking for ID and creating new ones => duplicate errors
+  Song.findOne({ spotifyid: song.id })//simultaneously checking for ID and creating new ones => duplicate errors
     .then(response => {
       if (response === null) {
 
@@ -33,9 +33,10 @@ function saveNewTrack(track) {
 
 function savePlayListData(playlist, tracks) {
   var filteredTracks = tracks.filter((track) => { if (track.track) { return true } else { return false } })
-  var trackIds = filteredTracks.map(track => { return track.track.id })
+  var nonUniqueTrackIds = filteredTracks.map(track => { return track.track.id })
+  var trackIds = [...new Set(nonUniqueTrackIds)];
   const newPlaylist = new Playlist({
-    _id: playlist.id,
+    spotifyid: playlist.id,
     name: playlist.name,
     external_url: playlist.external_urls.spotify,
     images: playlist.images,
@@ -50,7 +51,7 @@ function savePlayListData(playlist, tracks) {
 }
 
 function findAllPlaylistData(playlist, token) {
-  Playlist.findById(playlist.id)
+  Playlist.findOne({ spotifyid: playlist.id })
     .then(response => {
       if (response === null) {//playlist is not saved yet
         if (playlist.tracks && playlist.tracks.items) {
@@ -70,7 +71,7 @@ function findAllPlaylistData(playlist, token) {
 
 router.get('/search/:input&:type', (req, res, next) => {
   let { input, type } = req.params
-
+  console.log("got search")
   var authOptions = {
     url: "https://accounts.spotify.com/api/token",
     headers: {
@@ -91,6 +92,7 @@ router.get('/search/:input&:type', (req, res, next) => {
       var searchURL = type === "name" ? '/search?q=' + input + '&type=playlist' : '/playlists/' + input
       axios.get("https://api.spotify.com/v1" + searchURL, { headers: { Authorization: "Bearer " + token } })
         .then(response => {
+          console.log("got response")
           var playlists
           if (type === "name") {
             playlists = response.data.playlists.items
@@ -113,6 +115,25 @@ router.get('/search/:input&:type', (req, res, next) => {
       console.log(error);
     }
   })
+})
+
+router.get('/tracks/:playlistID', (req, res, next) => {
+  let playlistID = req.params.playlistID
+  Playlist.findOne({ spotifyid: playlistID })
+    .then(playlist => {
+      res.json(playlist.tracks)
+    })
+    .catch(err => next(err))
+})
+
+router.get('/songsById/:songId', (req, res, next) => {
+  let songId = req.params.songId
+  Song.findOne({ spotifyid: songId })
+    .then(song => {
+      res.json(song)
+    })
+    .catch(err => next(err))
+
 })
 
 router.get('/playlistPicture/:userid&:playlistid', (req, res, next) => {
